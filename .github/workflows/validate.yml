@@ -1,0 +1,24 @@
+name: Validate
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  card:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: npx playwright install --with-deps chromium --only-shell
+      - run: npm run build
+      - run: git diff --exit-code -- dist/ampmatrix-card.js
+      - run: npm test
+  hacs:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - uses: hacs/action@main
+        with:
+          category: plugin

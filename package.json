@@ -1,0 +1,12 @@
+{
+  "name": "ampmatrix-card",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node tests/branding.mjs && node tests/browser.mjs"
+  },
+  "license": "MIT",
+  "description": "A compact hi-fi amplifier card for Home Assistant"
+}
