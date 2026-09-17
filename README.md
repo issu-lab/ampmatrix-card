@@ -2,23 +2,23 @@
 
 **A compact hi-fi amplifier card for Home Assistant.**
 
-Neutral surfaces, a champagne volume scale and cassette-style source keys.
+Neutral surfaces, a champagne volume scale and an orange segmented LCD and cassette-style SOURCE/EQ keys.
 
 ## Project Status
 
 | Field | Current state |
 |---|---|
 | Maturity | Experimental |
-| Used in my homelab | Not yet — simulated entities only |
+| Used in my homelab | User testing in progress |
 | Recommended for production | Not yet |
 | Setup difficulty | Intermediate |
 | Documentation | Installation, configuration and development |
-| Current version | 0.1.0 |
+| Current version | 0.2.0 |
 | Distribution | HACS custom repository |
 
 > [!WARNING]
-> This project is experimental. Chromium tests use simulated entities; live Home
-> Assistant and physical-device validation remain pending.
+> This project is experimental. Automated tests use simulated entities. Early user
+> testing is in progress; this version still needs live-device confirmation.
 
 ## Why It Exists
 
@@ -36,12 +36,17 @@ These are screenshots of the implemented card with simulated data.
   and neutral when off, and follows the volume position.
 - Drag upward/downward on the knob to increase/decrease volume. Releasing a drag
   never toggles power. Arrow keys adjust volume; Enter/Space toggle power.
-- Use −/+ for precise 1% adjustments, configurable with `volume_step`.
-- Source keys come exclusively from `source_list`. Airplay is not offered if it
-  is only the current source. Inactive LEDs are neutral; active Bluetooth is blue,
-  Spotify green, IR coral and other sources champagne.
-- EQ opens a temporary preset selector populated from `sound_mode_list`.
-  Escape closes it. There are no fabricated bass/treble controls.
+- Use −/+ or arrow keys for native `volume_up/down` steps when supported.
+  Otherwise use `volume_set` with `volume_step` (default 1%).
+- The orange LCD shows the reported source, including Airplay when it is not
+  selectable. Bold segments retain faint inactive segments. When volume changes,
+  it shows `VOL 34` (no percent sign) for two seconds, then returns to the source.
+  This also follows external volume updates. It shows OFF when powered down.
+- Two equal-width SOURCE and EQ keys open temporary selectors, populated from
+  `source_list` and `sound_mode_list`. An unlisted current source can be displayed
+  but cannot be selected. Escape or × closes the selector.
+- The larger red knob LED indicates confirmed power state. Unknown/unavailable
+  state shows `--` and disables commands.
 - Commands and LED state follow the entity's supported features and reported state.
   Unavailable entities cannot receive commands. Service failures display an error.
 - No metadata display, artwork, playback controls or embedded credentials.
@@ -77,8 +82,8 @@ volume_step: 0.01
 A basic visual editor offers the entity and color mode. Other settings use YAML.
 The entity must declare turn_on/turn_off, volume_set or volume_step,
 select_source and select_sound_mode for the corresponding controls.
-Precise steps require volume_set and a numeric volume_level; integrations with
-only volume_step use their native volume_up/down services.
+`volume_step` is used only as a fallback when native stepping is unavailable;
+it requires volume_set and a numeric volume_level.
 
 ## Development and validation
 
@@ -94,14 +99,16 @@ server or Home Assistant connection is needed. `index.html` is a local simulator
 
 Validation covers power, off-state guards, volume precision, source and EQ commands,
 drag/click separation, keyboard, unavailable entities, missing feature flags,
-service errors, escaped source labels, screenshots and mobile overflow/touch height.
+service errors, escaped source labels, updates during a held click, LCD timers,
+external volume changes, screenshots and mobile overflow/touch targets.
 Test service payloads target only `media_player.demo`.
 
 ## Limits and next steps
 
-- Real-device validation, WebKit and physical mobile testing remain pending.
-- The compact layout is designed for the four supplied sources. Larger source
-  lists need additional responsive layout work before being recommended.
+- Live confirmation of the 0.2.0 fixes, WebKit and physical mobile testing remain pending.
+- The segmented LCD supports Latin letters, digits and dashes. Other characters
+  appear as dashes; the accessible label retains the original source. Long labels
+  shrink to fit, with a 32-character visual limit.
 - The rendered face is 2:1. EQ and service errors may add temporary content.
 - [Roadmap](ROADMAP.md) and [changelog](CHANGELOG.md).
 
