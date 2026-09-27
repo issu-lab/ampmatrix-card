@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.0 — 2026-09-27
+
+- Added configurable script presets with optional labels and visual-editor support.
+- Preset dispatch requires explicit selection; missing, unavailable and running
+  scripts are disabled. Script commands are independent of amplifier power.
+- Added a raised device name with friendly-name fallback and optional override.
+- Reduced LCD vertical padding without changing glyph geometry.
+- Centered −/+ on the knob and renamed the label MASTER VOLUME.
+- Added a warm-white diffuse ring that follows confirmed amplifier power state.
+- Expanded Chromium scenarios for scripts, the editor, state changes and layout.
+- No Home Assistant deployment, real script execution or physical device commands.
+
 ## 0.2.0 — 2026-09-17
 
 - Added the approved orange bold segmented LCD, with faint inactive segments.
